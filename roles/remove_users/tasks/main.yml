@@ -1,0 +1,7 @@
+---
+# Delete users 
+- name: "Remove user accounts"
+  user:
+    name: "{{ item }}"
+    state: "absent"
+  with_items: "{{ remove_users }}"

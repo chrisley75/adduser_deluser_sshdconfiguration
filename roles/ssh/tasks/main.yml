@@ -1,0 +1,12 @@
+---
+# tasks edit sshd_config
+- name: "Disable root login via SSH"
+  lineinfile:
+    dest: "/etc/ssh/sshd_config"
+    regexp: "^PermitRootLogin"
+    line: "PermitRootLogin no"
+- name: "Disable Password Authentification via SSH"
+  lineinfile:
+    dest: "/etc/ssh/sshd_config"
+    regexp: "^PasswordAuthentication"
+    line: "PasswordAuthentication no"

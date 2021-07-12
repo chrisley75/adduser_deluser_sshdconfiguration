@@ -1,0 +1,6 @@
+---
+- hosts: "{{ target | default('nothing') }}"
+  become: true
+  tasks:
+  - name: "Restart SSHD to apply modification"
+    command: systemctl restart sshd

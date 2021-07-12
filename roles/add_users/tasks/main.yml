@@ -1,0 +1,23 @@
+---
+# Add users and groups
+- name: "Create user groups"
+  group:
+    name: "{{ item }}"
+    state: "present"
+  with_items:
+    - admin
+    - cms
+- name: "Create cmsasr-user account"
+  user:
+    name: "cmsasr-user"
+    groups: "admin,cms"
+- name: "Create user accounts and add users to groups"
+  user:
+    name: "{{ item.username }}"
+    groups: "{{ item.groups }}"
+  with_items: "{{ users }}"
+- name: "Add authorized keys"
+  authorized_key:
+    user: "{{ item.username }}"
+    key: "{{ lookup('file', 'public_keys/'+ item.username + '.key.pub') }}"
+  with_items: "{{ users }}"

@@ -1,0 +1,11 @@
+---
+- hosts: "{{ target | default('nothing') }}"
+  become: true
+  roles:
+    - ssh
+    - add_users
+  vars:
+    users:
+      - username: "christopher-ley"
+        groups: "admin,cms"
+    remove_users:

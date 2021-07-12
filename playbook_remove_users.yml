@@ -1,0 +1,8 @@
+---
+- hosts: "{{ target | default('nothing') }}"
+  become: true
+  roles:
+    - remove_users
+  vars:
+    remove_users:
+      - tester

@@ -1,0 +1,6 @@
+---
+## var for users
+#vars:
+#  users:
+#  - username: "christopher-ley"
+#    groups: "admin,cms"
