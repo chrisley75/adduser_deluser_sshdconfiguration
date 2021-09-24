@@ -1,6 +1,6 @@
 # Manage Authentication and SSH Configuration
 
-These ansible playbooks will manage to create users with associated public ssh key in input and SSH configuration according to HPE security rules will also be configured and deployed.
+These ansible playbooks will manage to create users with associated public ssh key in input and SSH configuration. Security rules will also be configured and deployed.
 
 Main uses of this playbook:
 - Create new default CMS user "cmsasr-user"
@@ -15,8 +15,8 @@ Main uses of this playbook:
 
 # Prerequisites
 - User with a privileged account that will be used by ansible to connect to the servers
-- User Public Key must be provided in input (link to [https://rndwiki.corp.hpecorp.net/confluence/display/CMSA/Generate+SSH+KeyPair](https://rndwiki.corp.hpecorp.net/confluence/display/CMSA/Generate+SSH+KeyPair))
-
+- User Public Key must be provided in input 
+- 
 # Groups
 
 By default two user groups are created:
