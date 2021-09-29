@@ -6,7 +6,7 @@ Main uses of this playbook:
 - Create new default CMS user "cmsasr-user"
 - Create a new user with an associated public key
 - Create new user groups
-- Configure SSHD to comply with HPE security policies
+- Configure SSHD to comply with security policies
 - Delete old users
 - Manage sudoers rules
 
@@ -100,29 +100,29 @@ $ ansible-playbook playbook_ssh_add_users.yml -i hosts -e target="nexus" --user 
 PLAY [nexus] ****************************************************************************************************************************************************************************************************
 
 TASK [Gathering Facts] ******************************************************************************************************************************************************************************************
-ok: [osss175.gre.hpecorp.net]
+ok: [xxx]
 
 TASK [ssh : Disable root login via SSH] *************************************************************************************************************************************************************************
-ok: [osss175.gre.hpecorp.net]
+ok: [xxx]
 
 TASK [ssh : Disable Password Authentification via SSH] **********************************************************************************************************************************************************
-ok: [osss175.gre.hpecorp.net]
+ok: [xxx]
 
 TASK [add_users : Create user groups] ***************************************************************************************************************************************************************************
-ok: [osss175.gre.hpecorp.net] => (item=admin)
-ok: [osss175.gre.hpecorp.net] => (item=cms)
+ok: [xxx] => (item=admin)
+ok: [xxx] => (item=cms)
 
 TASK [add_users : Create cmsasr-user account] *******************************************************************************************************************************************************************
-ok: [osss175.gre.hpecorp.net]
+ok: [xxx]
 
 TASK [add_users : Create user accounts and add users to groups] *************************************************************************************************************************************************
-ok: [osss175.gre.hpecorp.net] => (item={'username': 'christopher-ley', 'groups': 'admin,cms'})
+ok: [xxx] => (item={'username': 'christopher-ley', 'groups': 'admin,cms'})
 
 TASK [add_users : Add authorized keys] **************************************************************************************************************************************************************************
-ok: [osss175.gre.hpecorp.net] => (item={'username': 'christopher-ley', 'groups': 'admin,cms'})
+ok: [xxx] => (item={'username': 'christopher-ley', 'groups': 'admin,cms'})
 
 PLAY RECAP ******************************************************************************************************************************************************************************************************
-osss175.gre.hpecorp.net    : ok=7    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+xxx    : ok=7    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 ```
 
 # Delete Old Users (playbook_remove_users.yml)
@@ -149,13 +149,13 @@ $ ansible-playbook playbook_remove_users.yml -i hosts -e target="nexus" --user c
 PLAY [nexus] ****************************************************************************************************************************************************************************************************
 
 TASK [Gathering Facts] ******************************************************************************************************************************************************************************************
-ok: [osss175.gre.hpecorp.net]
+ok: [xxx]
 
 TASK [remove_users : Remove user accounts] **********************************************************************************************************************************************************************
-changed: [osss175.gre.hpecorp.net] => (item=tester)
+changed: [xxx] => (item=tester)
 
 PLAY RECAP ******************************************************************************************************************************************************************************************************
-osss175.gre.hpecorp.net    : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+xxx    : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 ```
 
 # SSH Configuration
@@ -173,13 +173,13 @@ $ ansible-playbook playbook_restart_sshd.yml -i hosts -e target="nexus" --user c
 PLAY [nexus] ****************************************************************************************************************************************************************************************************
 
 TASK [Gathering Facts] ******************************************************************************************************************************************************************************************
-ok: [osss175.gre.hpecorp.net]
+ok: [xxx]
 
 TASK [Restart SSHD to apply modification] ***********************************************************************************************************************************************************************
-changed: [osss175.gre.hpecorp.net]
+changed: [xxx]
 
 PLAY RECAP ******************************************************************************************************************************************************************************************************
-osss175.gre.hpecorp.net    : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+xxx    : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 ```
 
 # Usage
