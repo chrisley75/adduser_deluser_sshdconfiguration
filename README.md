@@ -3,10 +3,10 @@
 These ansible playbooks will manage to create users with associated public ssh key in input and SSH configuration. Security rules will also be configured and deployed.
 
 Main uses of this playbook:
-- Create new default CMS user "cmsasr-user"
-- Create a new user with an associated public key
-- Create new user groups
-- Configure SSHD to comply with security policies
+- Create new default user "ops-user" to manage operations
+- Create new user groups "admin" and "ops"
+- Create a new personal user with an associated public key 
+- Configure SSHD to comply with security policies 
 - Delete old users
 - Manage sudoers rules
 
@@ -16,12 +16,12 @@ Main uses of this playbook:
 # Prerequisites
 - User with a privileged account that will be used by ansible to connect to the servers
 - User Public Key must be provided in input 
-- 
+
 # Groups
 
 By default two user groups are created:
 - admin : grant to have elevated sudoer rules
-- cms : all CMS users
+- ops : all ops users
 
 
 Only Administrator are in admin group.
@@ -39,23 +39,34 @@ NB: It is possible to create new groups and add user to group with this playbook
 
 Edit hosts file to add target server.
 
+Example hosts file:
+```bash
+[server]
+10.0.0.1
+
+[server2]
+10.0.0.2
+```
+
+Use hosts variable into playbook as target:
+
 hosts: "{{ target | default('nothing') }}" allows you to specify as a parameter of your ansible-playbook command on which group or even on a specific machine you want to launch your playbook, the syntax is as follows:
 
 
 
-For example to launch on the nexus the command is :
+For example to launch on the server the command is :
 ```bash
-ansible-playbook -i hosts -e target="nexus" playbook.yml
+ansible-playbook -i hosts -e target="server" playbook.yml
 ```
 
-For example to launch on the jenkins the command is :
+For example to launch on the server2 the command is :
 ```bash
-ansible-playbook -i hosts -e target="jenkins" playbook.yml 
+ansible-playbook -i hosts -e target="server2" playbook.yml 
 ```
 
-or another example if you want to target just one machine (example 15.112.152.50):
+Or another example if you want to target just one machine, below example for target server with IP 10.0.0.10, (no need to declare the ip in the hosts file) :
 ```bash
-ansible-playbook -i hosts -e target="15.112.152.50" playbook.yml 
+ansible-playbook -i hosts -e target="10.0.0.10" playbook.yml 
 ```
 
 # Create New Users (playbook_ssh_add_users.yml)
@@ -90,14 +101,14 @@ Example for adding user christopher-ley in groups cms and admin:
   vars:
     users:
       - username: "christopher-ley"
-        groups: "admin,cms"
+        groups: "admin,ops"
 ```
 
 Usage: 
 ```bash
-$ ansible-playbook playbook_ssh_add_users.yml -i hosts -e target="nexus" --user <privileged user> --private-key=<private_key>  | or use --user tester --ask-pass if first run
+$ ansible-playbook playbook_ssh_add_users.yml -i hosts -e target="server" --user <privileged user> --private-key=<private_key>  | or use --user "root" --ask-pass if first run
 
-PLAY [nexus] ****************************************************************************************************************************************************************************************************
+PLAY [server] ****************************************************************************************************************************************************************************************************
 
 TASK [Gathering Facts] ******************************************************************************************************************************************************************************************
 ok: [xxx]
@@ -110,16 +121,16 @@ ok: [xxx]
 
 TASK [add_users : Create user groups] ***************************************************************************************************************************************************************************
 ok: [xxx] => (item=admin)
-ok: [xxx] => (item=cms)
+ok: [xxx] => (item=ops)
 
-TASK [add_users : Create cmsasr-user account] *******************************************************************************************************************************************************************
+TASK [add_users : Create ops-user account] *******************************************************************************************************************************************************************
 ok: [xxx]
 
 TASK [add_users : Create user accounts and add users to groups] *************************************************************************************************************************************************
-ok: [xxx] => (item={'username': 'christopher-ley', 'groups': 'admin,cms'})
+ok: [xxx] => (item={'username': 'christopher-ley', 'groups': 'admin,ops'})
 
 TASK [add_users : Add authorized keys] **************************************************************************************************************************************************************************
-ok: [xxx] => (item={'username': 'christopher-ley', 'groups': 'admin,cms'})
+ok: [xxx] => (item={'username': 'christopher-ley', 'groups': 'admin,ops'})
 
 PLAY RECAP ******************************************************************************************************************************************************************************************************
 xxx    : ok=7    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
@@ -144,9 +155,9 @@ Example for removing user tester
 ```
 Usage:
 ```bash
-$ ansible-playbook playbook_remove_users.yml -i hosts -e target="nexus" --user christopher-ley --private-key=/home/christopher/.ssh/cley_id_rsa
+$ ansible-playbook playbook_remove_users.yml -i hosts -e target="server" --user christopher-ley --private-key=/home/christopher/.ssh/cley_id_rsa
 
-PLAY [nexus] ****************************************************************************************************************************************************************************************************
+PLAY [server] ****************************************************************************************************************************************************************************************************
 
 TASK [Gathering Facts] ******************************************************************************************************************************************************************************************
 ok: [xxx]
@@ -168,7 +179,7 @@ This will impact the default SSH access currently defined on servers.
 
 Reload SSH to apply new configuration by using playbook_restart_sshd.yml
 ```bash
-$ ansible-playbook playbook_restart_sshd.yml -i hosts -e target="nexus" --user christopher-ley --private-key=/home/christopher/.ssh/cley_id_rsa
+$ ansible-playbook playbook_restart_sshd.yml -i hosts -e target="server" --user christopher-ley --private-key=/home/christopher/.ssh/cley_id_rsa
 
 PLAY [nexus] ****************************************************************************************************************************************************************************************************
 
@@ -184,15 +195,15 @@ xxx    : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=
 
 # Usage
 
-Day0 : First run with tester user:
+Day0 : First run with default user (ie root):
 ```bash
-$ ansible-playbook playbook.yml -i hosts -e target="nexus" --user tester --ask-pass
+$ ansible-playbook playbook.yml -i hosts -e target="server" --user root --ask-pass
 ```
-you will be asked to fill in the tester password.
+you will be asked to fill in the root password.
 This feature will be remove after running securities playbook (password authentication disabled)
 
 Day1 : Common run with privileged user and sshkey
 ```bash
-$ ansible-playbook playbook.yml -i hosts -e target="nexus" --user christopher-ley --private-key=/home/christopher/.ssh/cley_id_rsa
+$ ansible-playbook playbook.yml -i hosts -e target="server" --user christopher-ley --private-key=/home/christopher/.ssh/cley_id_rsa
 ```
 

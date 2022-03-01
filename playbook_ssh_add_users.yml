@@ -7,5 +7,5 @@
   vars:
     users:
       - username: "christopher-ley"
-        groups: "admin,cms"
+        groups: "admin,ops"
     remove_users:

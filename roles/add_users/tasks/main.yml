@@ -6,11 +6,11 @@
     state: "present"
   with_items:
     - admin
-    - cms
-- name: "Create cmsasr-user account"
+    - ops
+- name: "Create ops-user account"
   user:
-    name: "cmsasr-user"
-    groups: "admin,cms"
+    name: "ops-user"
+    groups: "admin,ops"
 - name: "Create user accounts and add users to groups"
   user:
     name: "{{ item.username }}"
